@@ -1,18 +1,13 @@
-# create-svelte
+# English tutor app
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## TODO
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- [x] Basic UI
+- [ ] Basic ChatGPT translation(one-to-one)
+- [ ] Correction function
+  - [ ] Input: Japanese and English
+  - [ ] Ouput: Correction result and comments
+- [ ] Improve UI
 
 ## Developing
 
