@@ -1,14 +1,5 @@
 # English tutor app
 
-## TODO
-
-- [x] Basic UI
-- [x] Basic ChatGPT translation(one-to-one)
-- [x] Correction function
-  - [x] Input: Japanese and English
-  - [x] Ouput: Correction result and comments
-- [ ] Improve UI
-
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
