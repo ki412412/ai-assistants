@@ -16,6 +16,10 @@
     $: $input = `{"japanese":"${$japanese}", "english":"${$english}"}`;
 </script>
 
+<svelte:head>
+	<title>English Tutor</title>
+</svelte:head>
+
 <section class="flex justify-center">
 	<h1 class="flex text-center">
         <div class="ml-10 self-end">
