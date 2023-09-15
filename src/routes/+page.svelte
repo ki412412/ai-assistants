@@ -2,6 +2,7 @@
 	import { useCompletion } from 'ai/svelte';
 	import { writable } from 'svelte/store';
     import { Button, Textarea, Label } from 'flowbite-svelte';
+    import et from '$lib/assets/et.gif';
 
     const japanese = writable("");
     const english = writable("");
@@ -15,8 +16,13 @@
     $: $input = `{"japanese":"${$japanese}", "english":"${$english}"}`;
 </script>
 
-<section class="text-center">
-	<h1 class="text-3xl">English tutor</h1>
+<section class="flex justify-center">
+	<h1 class="flex text-center">
+        <div class="ml-10 self-end">
+            <span class=" text-4xl font-extrabolda">E</span><span class="text-xs">nglish</span> <span class="text-4xl font-extrabolda">T</span><span class="text-xs">utor</span>
+        </div>
+        <img src="{et}" alt="Deal with E.T." class="w-20 ml-6">
+    </h1>
 </section>
 
 <section class="mt-6 md:mt-12 w-full h-full">
@@ -40,7 +46,7 @@
 		<!-- result and comment -->
 		<div class="flex-1 flex flex-col">
             <div>
-                <Label for="result" class="mb-2">ChatGPT先生による英語訳とアドバイス</Label>
+                <Label for="result" class="mb-2">"先生"による英語訳とアドバイス</Label>
             </div>
             <div class="flex-1 flex flex-col">
                 <Textarea readonly class="flex-1" id="result" value={$completion} />
