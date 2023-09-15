@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { useCompletion } from 'ai/svelte';
 	import { writable } from 'svelte/store';
+    import { Button, Textarea, Label } from 'flowbite-svelte';
 
     const japanese = writable("");
     const english = writable("");
@@ -18,28 +19,32 @@
 	<h1 class="text-3xl">English tutor</h1>
 </section>
 
-<section class="mt-12 w-full h-full">
-	<div class="flex gap-6 border rounded p-12 m-6 h-5/6">
+<section class="mt-6 md:mt-12 w-full h-full">
+	<div class="flex flex-col md:flex-row gap-12 md:gap-6 p-3 md:p-12 m-6 h-full">
 
         <!-- original -->
-        <div class="flex flex-col content-stretch gap-6 self-stretch rounded w-full h-1/2">
-            <textarea class="w-full rounded shadow-lg p-3" bind:value={$japanese} placeholder="日本語（原文）"/>
-            <textarea class="w-full rounded shadow-lg p-3" bind:value={$english} placeholder="あなたの英語訳"/>
-            <form class="w-full relative flex" on:submit={handleSubmit}>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full self-end">
-                   添削
-                </button>
+        <div class="flex-1 flex flex-col content-stretch gap-3 md:gap-6 self-stretch rounded">
+            <div>
+                <Label for="japanese" class="mb-2">日本語（原文）</Label>
+                <Textarea id="japanese" class="bg-white" placeholder="今日もいい天気ですね。" bind:value={$japanese} rows="4"/>
+            </div>
+            <div>
+                <Label for="english" class="mb-2">あなたの英語訳</Label>
+                <Textarea id="english" class="bg-white" placeholder="It's a nice day today." bind:value={$english} rows="4"/>
+            </div>
+            <form class="relative flex" on:submit={handleSubmit}>
+                <Button type="submit" color="blue" class="grow">添削</Button>
             </form>
         </div>
 
-        <!-- translate button -->
-        <!-- <div class=" self-start place-self-center">
-            
-        </div> -->
-
 		<!-- result and comment -->
-		<div class="self-stretch rounded shadow-lg bg-white border w-full">
-            <textarea readonly class="w-full h-full p-3" value={$completion} placeholder="ChatGPT先生による英語訳とアドバイス"/>
+		<div class="flex-1 flex flex-col">
+            <div>
+                <Label for="result" class="mb-2">ChatGPT先生による英語訳とアドバイス</Label>
+            </div>
+            <div class="flex-1 flex flex-col">
+                <Textarea readonly class="flex-1" id="result" value={$completion} />
+            </div>
 		</div>
 	</div>
 </section>
