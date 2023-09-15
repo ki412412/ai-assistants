@@ -3,10 +3,10 @@
 ## TODO
 
 - [x] Basic UI
-- [ ] Basic ChatGPT translation(one-to-one)
-- [ ] Correction function
-  - [ ] Input: Japanese and English
-  - [ ] Ouput: Correction result and comments
+- [x] Basic ChatGPT translation(one-to-one)
+- [x] Correction function
+  - [x] Input: Japanese and English
+  - [x] Ouput: Correction result and comments
 - [ ] Improve UI
 
 ## Developing

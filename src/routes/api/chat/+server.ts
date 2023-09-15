@@ -14,6 +14,7 @@ const openai = new OpenAIApi(config);
 export const POST = (async ({ request }) => {
     // Extract the `prompt` from the body of the request
     const { prompt } = await request.json();
+    const content = createContent(prompt);
 
     // Ask OpenAI for a streaming chat completion given the prompt
     const response = await openai.createChatCompletion({
@@ -23,7 +24,7 @@ export const POST = (async ({ request }) => {
         //     content: message.content,
         //     role: message.role
         // }))
-        messages: [ {role: "user", content: prompt}]
+        messages: [ {role: "user", content: content}]
     });
 
     // Convert the response into a friendly text-stream
@@ -31,3 +32,34 @@ export const POST = (async ({ request }) => {
     // Respond with the stream
     return new StreamingTextResponse(stream);
 }) satisfies RequestHandler;
+
+function createContent(prompt: string): string {
+    // parse json 
+    const json = JSON.parse(prompt);
+
+    const result = `
+あなたはプロの英会話講師です。
+以下、生徒が作成した日本語（原文）と日本語（原文）の英語訳をもとに、
+以下例を参考に、回答の日本語（原文）の正しい英語訳(英語)、アドバイス(日本語)、会話の例の部分を埋めてください。
+
+回答
+\`\`\`
+## 日本語（原文）
+${json.japanese}
+
+## 日本語（原文）の英語訳
+${json.english}
+
+## 日本語（原文）の正しい英語訳(英語)
+[ここに記入してください]
+
+## アドバイス(日本語)
+[ここに記入してください]
+
+## 会話の例
+[ここに記入してください]
+\`\`\`
+`;
+
+    return result;
+}
