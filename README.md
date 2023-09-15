@@ -1,4 +1,11 @@
-# English tutor app
+# English Tutor
+
+![App](./app.jpg)
+
+He will help you to learn English words and phrases.
+You can ask him to translate and correct a word or phrase from Japanese to English.
+
+Powered by OpenAI's Chatbot API.
 
 ## Developing
 
@@ -10,6 +17,13 @@ npm run dev
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
+
+### Environment Variables
+
+You need to create `.env` file to run the app.
+`.env.example` is a template for the file.
+Beaware that you need to set `OPENAI_API_KEY` to run the app and the key is not included in the template.
+Consult [OpenAI's help page](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key) to get the key.
 
 ## Building
 
