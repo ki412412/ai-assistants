@@ -9,7 +9,7 @@
 
     // input: your text to translate
     // completion: the responded text from chatGPT
-    let { input, handleSubmit, completion, stop } = useCompletion({
+    let { input, handleSubmit, completion, stop, isLoading } = useCompletion({
     	api: "/api/chat",
   	});
 
@@ -43,7 +43,11 @@
                 <Textarea id="english" class="bg-white" placeholder="It's a nice day today." bind:value={$english} rows="4"/>
             </div>
             <form class="relative flex" on:submit={handleSubmit}>
-                <Button type="submit" color="blue" class="grow">添削</Button>
+                {#if $isLoading}
+                    <Button type="button" color="red" class="grow" on:click={stop}>ストップ</Button>
+                {:else}
+                    <Button type="submit" color="blue" class="grow">添削する</Button>
+                {/if}
             </form>
         </div>
 
