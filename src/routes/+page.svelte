@@ -13,7 +13,7 @@
     	api: "/api/chat",
   	});
 
-    $: $input = `{"japanese":"${$japanese}", "english":"${$english}"}`;
+    $: $input = `{"japanese":"${$japanese}", "english":"${$english}"}`.replace(/\n/, "\\n");
 </script>
 
 <svelte:head>
