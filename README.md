@@ -1,9 +1,9 @@
-# English Tutor
+# AI Assistants🤖🤖
 
-![App](./app.jpg)
-
-He will help you to learn English words and phrases.
-You can ask him to translate and correct a word or phrase from Japanese to English.
+🤖 English Tutor
+![English Tutor](./english-tutor.png)
+🤖 Git Commit Generator
+![Git Commit Generator](./git-commit-generator.png)
 
 Powered by OpenAI's Chatbot API.
 
