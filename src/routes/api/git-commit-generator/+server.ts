@@ -34,15 +34,12 @@ export const POST = (async ({ request }) => {
 }) satisfies RequestHandler;
 
 function createContent(prompt: string): string {
-    // parse json 
-    // const json = JSON.parse(prompt);
-
     const result = `
 あなたはプロのソフトウェア開発者です。
 以下、同僚のデベロッパーが作成したコミットの内容の説明をもとに、
 以下のGitコミットメッセージとアドバイスの部分を埋めてください。
 ただし、コミットメッセージはConventional Commitsのフォーマットに従って書いてください。
-必要に応じてコミットメッセージにbodyやfooterを追加しても構いません。
+また、必要に応じてGitコミットメッセージにボディとフッターを記載して構いません。
 
 \`\`\`
 ## コミットの内容の説明
