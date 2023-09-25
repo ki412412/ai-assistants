@@ -31,7 +31,7 @@
         <div class="flex-1 flex flex-col content-stretch self-stretch rounded">
             <div>
                 <Label for="japanese" class="mb-2">コミットの内容の説明</Label>
-                <Textarea id="japanese" class="bg-white" placeholder="ログイン機能の不具合を修正。" bind:value={$input} rows="4"/>
+                <Textarea id="japanese" class="bg-white" placeholder="URLアンカーでタブを指定できるようにした。" bind:value={$input} rows="4"/>
             </div>
             <form class="relative flex" on:submit={handleSubmit}>
                 {#if $isLoading}
@@ -48,7 +48,17 @@
                 <Label for="result" class="mb-2">コミットメッセージとアドバイス</Label>
             </div>
             <div class="flex-1 flex flex-col">
-                <Textarea readonly class="flex-1" id="result" value={$completion} rows="30"/>
+                <Textarea readonly class="flex-1" id="result" value={$completion} rows="30" placeholder="## コミットの内容の説明
+URLアンカーでタブを指定できるようにした。
+
+## Gitコミットメッセージ
+feat: URLアンカーでのタブ指定機能を追加する
+
+## Gitコミットメッセージ（英語）
+feat: Add ability to specify tabs with URL anchors
+
+## アドバイス
+コミットメッセージは変更の内容、目的、意図を明確に伝えることが重要です。このコミットでは、URLアンカーでタブを指定できる機能が追加されましたので、feat（機能追加）というプレフィックスを使用しましょう。また、コミットメッセージは英語にすることが一般的ですので、日本語で書かれたコミットメッセージを英語に翻訳しました。コミットメッセージの文言は短くわかりやすくすることが大切ですが、必要に応じてボディやフッターを追加して詳細な説明を記述することもできます。"/>
             </div>
 		</div>
 	</div>
