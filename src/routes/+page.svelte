@@ -13,15 +13,20 @@
     }
 </script>
 
-<Tabs class="flex justify-end">
-    <a href="#english-tutor">
-        <TabItem open={!anchor || anchor === 'english-tutor'} title="English Tutor">
-            <EnglishTutor />
-        </TabItem>
-    </a>
-    <a href="#git-commit-generator">
-        <TabItem open={anchor === 'git-commit-generator'} title="Git Commit Generator">
-            <GitCommitGenerator />
-        </TabItem>
-    </a>
+<Tabs class="flex justify-between">
+    <div class="text-base md:text-2xl text-center md:text-left w-full md:w-fit">
+        AI Assistants
+    </div>
+    <div class="flex w-full md:w-fit justify-center mt-3 md:mt-0">
+        <a href="#english-tutor">
+            <TabItem open={!anchor || anchor === 'english-tutor'} title="🤖 English Tutor">
+                <EnglishTutor />
+            </TabItem>
+        </a>
+        <a href="#git-commit-generator">
+            <TabItem open={anchor === 'git-commit-generator'} title="🤖 Git Commit Generator">
+                <GitCommitGenerator />
+            </TabItem>
+        </a>
+    </div>
 </Tabs>

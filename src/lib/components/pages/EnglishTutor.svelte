@@ -30,7 +30,7 @@
 </section>
 
 <section class="mt-6 md:mt-12 w-full h-full">
-	<div class="flex flex-col md:flex-row gap-12 md:gap-6 p-3 md:p-12 m-6 h-full">
+	<div class="flex flex-col md:flex-row gap-12 md:gap-6 p-3 md:p-12 md:m-6 h-full">
 
         <!-- original -->
         <div class="flex-1 flex flex-col content-stretch gap-3 md:gap-6 self-stretch rounded">
