@@ -57,25 +57,16 @@
                 <Label for="result" class="mb-2">"先生"による英語訳とアドバイス</Label>
             </div>
             <div class="flex-1 flex flex-col">
-                <Textarea readonly class="flex-1" id="result" value={$completion} placeholder="## 日本語（原文）
-今日もいい天気ですね。
-
-## 日本語（原文）の英語訳
-it's a nice day today.
-
-## 日本語（原文）の正しい英語訳(英語)
-The weather is nice again today.
+                <Textarea readonly class="flex-1" id="result" value={$completion} placeholder="## 先生の英語訳(英語)
+It's a nice weather today.
 
 ## アドバイス(日本語)
-「いい」という表現は、「nice」に相当しますが、より自然な表現では、「The weather is nice」というフレーズを使うことができます。また、「今日も」の部分を追加することで、文脈が明確になります。
+訳文は正しいですが、「天気」を「weather」と表現することを伝えるとさらに自然な表現になります。
 
 ## 会話の例
-A: 今日もいい天気ですね。
-B: はい、本当にいい天気ですね。外に出かけるのはいかがですか？
-A: いいアイディアですね！それなら、ピクニックに行きましょう。
-B: いいですね！何を持って行きましょうか？
-A: サンドイッチとフルーツ、そして水を持って行きましょう。
-B: それで十分ですね。では、出発しましょう！"/>
+先生：It's a nice weather today.
+生徒：Yes, it's so sunny. I love this kind of weather.
+先生：That's great. You can enjoy various outdoor activities on a day like this."/>
             </div>
 		</div>
 	</div>
