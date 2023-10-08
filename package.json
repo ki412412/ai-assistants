@@ -38,6 +38,9 @@
 	"type": "module",
 	"dependencies": {
 		"@popperjs/core": "^2.11.8",
+		"@simplewebauthn/browser": "^8.3.1",
+		"@simplewebauthn/server": "^8.2.0",
+		"@supabase/supabase-js": "^2.38.0",
 		"ai": "^2.2.12",
 		"flowbite": "^1.8.1",
 		"flowbite-svelte": "^0.44.15",
