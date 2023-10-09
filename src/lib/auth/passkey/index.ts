@@ -18,6 +18,7 @@ import type {
 } from '@simplewebauthn/server';
 import type {
     AuthenticationResponseJSON,
+    PublicKeyCredentialRequestOptionsJSON,
     AuthenticatorDevice,
     RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
@@ -167,5 +168,20 @@ export class Passkey {
                 throw error;
             }
         }
+    }
+
+    public async generateAuthenticationOptions(user: LoggedInUser): Promise<PublicKeyCredentialRequestOptionsJSON> {
+        const opts: GenerateAuthenticationOptionsOpts = {
+            timeout: 60000,
+            allowCredentials: user.devices.map((dev) => ({
+                id: dev.credentialID,
+                type: 'public-key',
+                transports: dev.transports,
+            })),
+            userVerification: 'required',
+            rpID: this.rpID,
+        };
+    
+        return await generateAuthenticationOptions(opts);
     }
 }
