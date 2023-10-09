@@ -49,7 +49,7 @@ export class Passkey {
         }
     }
 
-    public async getUserFromDB(loggedInUserId: string): Promise<LoggedInUser> {
+    public async getUserByID(loggedInUserId: string): Promise<LoggedInUser|null> {
         const { data, error } = await supabase.from("users")
             .select(`
                 id, username,
@@ -62,22 +62,77 @@ export class Passkey {
             `)
             .eq('id', loggedInUserId)
             .limit(1);
-        
+
+        if (data.length === 0) {
+            return null;
+        }
         if (error) {
             throw error;
         }
 
         // convert credentialID and credentialPublicKey to fits the type of AuthenticatorDevice
-        data[0].authenticators.forEach((authenticator) => {
-            authenticator.credentialID = isoBase64URL.toBuffer(authenticator.credentialID);
-            authenticator.credentialPublicKey = isoBase64URL.toBuffer(authenticator.credentialPublicKey);
-            authenticator.transports = JSON.parse(authenticator.transports);
-        });
+        // data[0].authenticators.forEach((authenticator) => {
+        //     authenticator.credentialID = isoBase64URL.toBuffer(authenticator.credentialID);
+        //     authenticator.credentialPublicKey = isoBase64URL.toBuffer(authenticator.credentialPublicKey);
+        //     authenticator.transports = JSON.parse(authenticator.transports);
+        // });
 
         const user: LoggedInUser = {
             id: data[0].id,
             username: data[0].username,
-            devices: data[0].authenticators
+            devices: data[0].authenticators.map((authenticator) => {
+                return {
+                    credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
+                    credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
+                    counter: authenticator.counter,
+                    transports: JSON.parse(authenticator.transports),
+                };
+            }),
+        };
+
+        return user;
+    }
+
+    public async getUserByUsername(username: string): Promise<LoggedInUser|null> {
+        const { data, error } = await supabase.from("users")
+            .select(`
+                id, username,
+                authenticators (
+                    credentialID,
+                    credentialPublicKey,
+                    counter,
+                    transports
+                )
+            `)
+            .eq('username', username)
+            .limit(1);
+        
+        if (data.length === 0) {
+            return null;
+        }
+        
+        if (error) {
+            throw error;
+        }
+        console.log('--------------');
+        // convert credentialID and credentialPublicKey to fits the type of AuthenticatorDevice
+        // data[0].authenticators.forEach((authenticator) => {
+        //     authenticator.credentialID = isoBase64URL.toBuffer(authenticator.credentialID);
+        //     authenticator.credentialPublicKey = isoBase64URL.toBuffer(authenticator.credentialPublicKey);
+        //     authenticator.transports = JSON.parse(authenticator.transports);
+        // });
+
+        const user: LoggedInUser = {
+            id: data[0].id,
+            username: data[0].username,
+            devices: data[0].authenticators.map((authenticator) => {
+                return {
+                    credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
+                    credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
+                    counter: authenticator.counter,
+                    transports: JSON.parse(authenticator.transports),
+                };
+            }),
         };
 
         return user;

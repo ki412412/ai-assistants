@@ -1,18 +1,28 @@
 import { Passkey } from '$lib/auth/passkey';
 import { json } from '@sveltejs/kit';
 
-// TODO: Replace with request's logged-in user ID
-const userID = '1c2213fb-0e6c-490a-a861-898c67b5b3f4';
-
 export async function POST({ request, cookies }) {
     const passkey = new Passkey();
+
+    const expectedChallenge = cookies.get('challenge') ?? '';
+    if (!expectedChallenge) {
+        return json({ error: 'Challenge not found' }, { status: 404 });
+    }
+    const userID = cookies.get('userID') ?? '';
+    if (!userID) {
+        return json({ error: 'User ID not found' }, { status: 404 });
+    }
+    
+    // get the user from the DB
+    const user = await passkey.getUserByID(userID);
+    if (!user) {
+        return json({ error: 'User not found' }, { status: 404 });
+    }
 
     // Verify that the request originated from the expected domain
     let verification;
     try {
         const body = await passkey.getAuthenticationResponse(request);
-        const expectedChallenge = cookies.get('challenge') ?? '';
-        const user = await passkey.getUserFromDB(userID);
         verification = await passkey.verifyAuthenticationResponse(body, expectedChallenge, user);
     } catch (error) {
         const _error = error as Error;

@@ -1,13 +1,9 @@
 <script lang="ts">
-    import { Button, Textarea, Label } from 'flowbite-svelte';
-	// import SimpleWebAuthnBrowser from '@simplewebauthn/browser';
+    import { Button, Input, Label } from 'flowbite-svelte';
 	import { startRegistration } from '@simplewebauthn/browser';
-
-	// <button>
-	// const elemBegin = document.getElementById('btnBegin');
-	// <span>/<p>/etc...
+	
+	let username = '';
 	let msgSuccess = ''
-	// <span>/<p>/etc...
 	let msgError = ''
 
 	// Start registration when the user clicks a button
@@ -15,6 +11,20 @@
 		// Reset success/error messages
 		msgSuccess = '';
 		msgError = '';
+		
+		// Create a user
+		const resp1 = await fetch('/api/auth/create-user', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ username })
+		});
+		// error handling
+		if (resp1.status !== 200) {
+			msgError = 'Could not create a user. Please try again.';
+			return;
+		}
 
 		// GET registration options from the endpoint that calls
 		// @simplewebauthn/server -> generateRegistrationOptions()
@@ -59,6 +69,7 @@
 	};
 </script>
 
+<Input type="text" placeholder="Satoshi Nakamoto" bind:value={username}/>
 <Button type="submit" color="blue" class="grow" on:click={register}>Register</Button>
 <p id="success" class="text-green-600">{@html msgSuccess}</p>
 <p id="error" class="text-red-600">{@html msgError}</p>

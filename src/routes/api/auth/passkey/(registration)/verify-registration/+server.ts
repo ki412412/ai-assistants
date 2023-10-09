@@ -1,9 +1,6 @@
 import { Passkey } from '$lib/auth/passkey';
 import { json } from '@sveltejs/kit';
 
-// TODO: Replace with request's logged-in user ID
-const userID = '1c2213fb-0e6c-490a-a861-898c67b5b3f4';
-
 export async function POST({ request, cookies }) {
     const passkey = new Passkey();
 
@@ -21,7 +18,8 @@ export async function POST({ request, cookies }) {
     const { verified, registrationInfo } = verification;
     if (verified && registrationInfo) {
         try {
-            const user = await passkey.getUserFromDB(userID);
+            const userID = cookies.get('userID') ?? '';
+            const user = await passkey.getUserByID(userID);
             await passkey.registerNewDeviceToDBIfNotExists(user, verification, registrationResponse)
         } catch (error) {
             console.error(error);
@@ -31,6 +29,8 @@ export async function POST({ request, cookies }) {
 
     // Remove the challenge from the cookie
     cookies.set('currentChallenge', '');
+
+    // TODO: Should we remove the userID cookie here?
 
     return json({ verified });
 }
