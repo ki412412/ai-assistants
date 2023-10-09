@@ -54,7 +54,6 @@ export class Passkey {
             .select(`
                 id, username,
                 authenticators (
-                    id,
                     credentialID,
                     credentialPublicKey,
                     counter,
@@ -63,22 +62,23 @@ export class Passkey {
             `)
             .eq('id', loggedInUserId)
             .limit(1);
+        
+        if (error) {
+            throw error;
+        }
 
-        // convert base64url to Uint8Array
+        // convert credentialID and credentialPublicKey to fits the type of AuthenticatorDevice
         data[0].authenticators.forEach((authenticator) => {
             authenticator.credentialID = isoBase64URL.toBuffer(authenticator.credentialID);
             authenticator.credentialPublicKey = isoBase64URL.toBuffer(authenticator.credentialPublicKey);
+            authenticator.transports = JSON.parse(authenticator.transports);
         });
 
         const user: LoggedInUser = {
             id: data[0].id,
             username: data[0].username,
-            devices: []
+            devices: data[0].authenticators
         };
-
-        if (error) {
-            console.log(error);
-        }
 
         return user;
     }
@@ -184,5 +184,63 @@ export class Passkey {
         };
     
         return await generateAuthenticationOptions(opts);
+    }
+
+    public async getAuthenticationResponse(request: Request): Promise<AuthenticationResponseJSON> {
+        const jsonData = await request.json();
+        return {
+            id: jsonData.id,
+            rawId: jsonData.rawId,
+            response: {
+                authenticatorData: jsonData.response.authenticatorData,
+                clientDataJSON: jsonData.response.clientDataJSON,
+                signature: jsonData.response.signature,
+                userHandle: jsonData.response.userHandle,
+            },
+            authenticatorAttachment: jsonData.authenticatorAttachment,
+            clientExtensionResults: jsonData.clientExtensionResults,
+            type: jsonData.type,
+        } as AuthenticationResponseJSON;
+    }
+
+    public async verifyAuthenticationResponse(body: AuthenticationResponseJSON, expectedChallenge: string, user: LoggedInUser): Promise<VerifiedAuthenticationResponse> {
+        
+        // check if the authenticator is registered to the user
+        let dbAuthenticator;
+        const bodyCredIDBuffer = isoBase64URL.toBuffer(body.rawId);
+
+        for (const dev of user.devices) {
+            // console.log(`${isoUint8Array.toHex(dev.credentialID)} === ${isoUint8Array.toHex(bodyCredIDBuffer)} => ${isoUint8Array.areEqual(dev.credentialID, bodyCredIDBuffer)}`);
+            if (isoUint8Array.areEqual(dev.credentialID, bodyCredIDBuffer)) {
+                dbAuthenticator = dev;
+                break;
+            }
+        }
+        if (!dbAuthenticator) {
+            throw new Error('Authenticator is not registered with this site');
+        }
+
+        // verify the authentication response
+        const opts: VerifyAuthenticationResponseOpts = {
+            response: body,
+            expectedChallenge: `${expectedChallenge}`,
+            expectedOrigin: this.origin,
+            expectedRPID: this.rpID,
+            authenticator: dbAuthenticator,
+            requireUserVerification: true,
+        };
+        return await verifyAuthenticationResponse(opts);
+    }
+
+    public async updateAuthenticatorConterInDB(verification: VerifiedAuthenticationResponse): Promise<void> {
+        const { authenticationInfo } = verification;
+
+        const { data, error } = await supabase.from("authenticators")
+                            .update({ counter: authenticationInfo.newCounter })
+                            .eq('credentialID', authenticationInfo.credentialID);
+        if (error) {
+            console.error(error);
+            throw error;
+        }
     }
 }
