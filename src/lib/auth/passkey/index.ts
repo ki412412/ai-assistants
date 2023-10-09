@@ -23,7 +23,7 @@ import type {
     AuthenticatorDevice,
     RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
-import type { LoggedInUser } from './example-server.ts';
+import type { LoggedInUser } from './types.js';
 
 export class Passkey {
 
