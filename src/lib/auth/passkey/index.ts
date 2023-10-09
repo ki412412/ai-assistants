@@ -19,6 +19,7 @@ import type {
 import type {
     AuthenticationResponseJSON,
     PublicKeyCredentialRequestOptionsJSON,
+    PublicKeyCredentialCreationOptionsJSON,
     AuthenticatorDevice,
     RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
@@ -82,7 +83,7 @@ export class Passkey {
         return user;
     }
 
-    public async generateRegistrationOptions(user: LoggedInUser): Promise<any> {
+    public async generateRegistrationOptions(user: LoggedInUser): Promise<PublicKeyCredentialCreationOptionsJSON> {
         const opts: GenerateRegistrationOptionsOpts = {
             rpName: this.rpName,
             rpID: this.rpID,
