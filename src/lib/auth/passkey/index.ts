@@ -56,19 +56,12 @@ export class Passkey {
             .eq('id', loggedInUserId)
             .limit(1);
 
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             return null;
         }
         if (error) {
             throw error;
         }
-
-        // convert credentialID and credentialPublicKey to fits the type of AuthenticatorDevice
-        // data[0].authenticators.forEach((authenticator) => {
-        //     authenticator.credentialID = isoBase64URL.toBuffer(authenticator.credentialID);
-        //     authenticator.credentialPublicKey = isoBase64URL.toBuffer(authenticator.credentialPublicKey);
-        //     authenticator.transports = JSON.parse(authenticator.transports);
-        // });
 
         const user: LoggedInUser = {
             id: data[0].id,
@@ -100,20 +93,13 @@ export class Passkey {
             .eq('username', username)
             .limit(1);
         
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             return null;
         }
         
         if (error) {
             throw error;
         }
-        console.log('--------------');
-        // convert credentialID and credentialPublicKey to fits the type of AuthenticatorDevice
-        // data[0].authenticators.forEach((authenticator) => {
-        //     authenticator.credentialID = isoBase64URL.toBuffer(authenticator.credentialID);
-        //     authenticator.credentialPublicKey = isoBase64URL.toBuffer(authenticator.credentialPublicKey);
-        //     authenticator.transports = JSON.parse(authenticator.transports);
-        // });
 
         const user: LoggedInUser = {
             id: data[0].id,
@@ -201,7 +187,7 @@ export class Passkey {
         const existingDevice = await this.doesDeviceExist(user, credentialID);
         if (!existingDevice) {
 
-            const {data, error } = await supabase.from('authenticators').insert([
+            const { error } = await supabase.from('authenticators').insert([
                 {
                     user_id: user.id,
                     credentialID: isoBase64URL.fromBuffer(credentialID),
@@ -283,7 +269,7 @@ export class Passkey {
     public async updateAuthenticatorConterInDB(verification: VerifiedAuthenticationResponse): Promise<void> {
         const { authenticationInfo } = verification;
 
-        const { data, error } = await supabase.from("authenticators")
+        const { error } = await supabase.from("authenticators")
                             .update({ counter: authenticationInfo.newCounter })
                             .eq('credentialID', authenticationInfo.credentialID);
         if (error) {
