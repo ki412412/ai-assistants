@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>English Tutor</title>
+	<title>Git Commit Generator</title>
 </svelte:head>
 
 <section class="flex justify-center">
