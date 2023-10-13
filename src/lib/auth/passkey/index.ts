@@ -24,6 +24,7 @@ import type {
     RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
 import type { LoggedInUser } from './types.js';
+import { RP_NAME, RP_ID, ORIGIN } from "$env/static/private";
 
 export class Passkey {
 
@@ -36,17 +37,9 @@ export class Passkey {
 
     // contructor
     constructor() {
-        // TODO: Read from environment variables instead
-        this.rpName = 'SimpleWebAuthn Example';
-        this.rpID = 'localhost';
-        this.origin = `https://${this.rpID}`;
-
-        if (process.env.ENABLE_HTTPS) {
-            this.origin = `https://${this.rpID}`;
-        } else {
-            const port = 5173;
-            this.origin = `http://localhost:${port}`;
-        }
+        this.rpName = RP_NAME;
+        this.rpID = RP_ID;
+        this.origin = ORIGIN;
     }
 
     public async getUserByID(loggedInUserId: string): Promise<LoggedInUser|null> {
