@@ -1,5 +1,6 @@
 import { Passkey } from '$lib/auth/passkey';
 import { json } from '@sveltejs/kit';
+import { supabase } from "$lib/supabaseClient";
 
 export async function POST({ request, cookies }) {
     const passkey = new Passkey();
@@ -38,6 +39,19 @@ export async function POST({ request, cookies }) {
 
     // Clear the challenge from the cookie
     cookies.set('challenge', '');
+
+    // Start session
+    const sessionID = crypto.randomUUID();
+    const { error: insertError } = await supabase.from("sessions")
+                                    .insert([{ 
+                                        id: sessionID,
+                                        user_id: user.id,
+                                        user_agent: request.headers.get('user-agent'),
+                                    }]);
+    if (insertError) {
+        return json({ error: insertError }, { status: 500 });
+    }
+    cookies.set('__session', sessionID, { secure: true, path: '/' });
 
     return json({ verified });
 }

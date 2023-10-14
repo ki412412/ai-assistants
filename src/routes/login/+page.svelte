@@ -2,14 +2,10 @@
 	import { Button, Input, Label } from 'flowbite-svelte';
 	// import SimpleWebAuthnBrowser from '@simplewebauthn/browser';
 	import { startAuthentication } from '@simplewebauthn/browser';
+	import { goto } from '$app/navigation';
 
-	// const { startAuthentication } = SimpleWebAuthnBrowser;
 	let username = '';
-	// <button>
-	// let elemBegin = '';
-	// <span>/<p>/etc...
 	let msgSuccess = '';
-	// <span>/<p>/etc...
 	let msgError = '';
 
 	// Start authentication when the user clicks a button
@@ -58,6 +54,7 @@
 		// Show UI appropriate for the `verified` status
 		if (verificationJSON && verificationJSON.verified) {
 			msgSuccess = 'Success!';
+			goto('/');
 		} else {
 			msgError = `Oh no, something went wrong! Response: <pre>${JSON.stringify(
 				verificationJSON
