@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Button, Input, Label } from 'flowbite-svelte';
+	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	// import SimpleWebAuthnBrowser from '@simplewebauthn/browser';
 	import { startAuthentication } from '@simplewebauthn/browser';
 	import { goto } from '$app/navigation';
+	import { NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
 
 	let username = '';
 	let msgSuccess = '';
@@ -21,7 +22,7 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({username: username})
+			body: JSON.stringify({ username: username })
 		});
 		if (!resp.ok) {
 			const { message } = await resp.json();
@@ -63,7 +64,20 @@
 	}
 </script>
 
-<Input type="text" name="username" placeholder="" autocomplete="webauthn" bind:value={username}/>
-<Button type="submit" color="blue" class="grow" on:click={login}>Login</Button>
-<p id="success" class="text-green-600">{@html msgSuccess}</p>
-<p id="error" class="text-red-600">{@html msgError}</p>
+<Card class="w-full max-w-md m-auto">
+	<form class="flex flex-col space-y-6">
+		<h3 class="text-xl font-medium text-gray-900 dark:text-white">Welcome to AI Assistant🤖!</h3>
+		<Label class="space-y-2">
+			<span>Username</span>
+			<Input type="text" name="username" bind:value={username} placeholder="Satoshi Nakamoto" required autocomplete="webauthn" />
+			{#if msgError}
+				<p id="error" class="text-red-600">{@html msgError}</p>
+			{/if}
+		</Label>
+		
+		<Button type="button" class="w-full" on:click={login}>Login with Passkey</Button>
+		<div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+			Not registered? Ask <a href="https://github.com/ki412412" target="_blank" class="text-primary-700 hover:underline dark:text-primary-500">me!</a>
+		</div>
+	</form>
+</Card>
