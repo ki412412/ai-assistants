@@ -4,7 +4,12 @@ import { supabase } from "$lib/supabaseClient";
 export const handle = (async ({ event, resolve }) => {
 
     // Skip if it is specific route
-    if (event.url.pathname.startsWith('/api/auth/passkey') || event.url.pathname.match('/login') || event.url.pathname.match('/logout')) {
+    if (event.url.pathname.startsWith('/api/auth/passkey')
+        || event.url.pathname.startsWith('/api/auth/create-user')// TODO: Remove this
+        || event.url.pathname.match('/register')   
+        || event.url.pathname.match('/login')
+        || event.url.pathname.match('/logout')
+    ) {
         return resolve(event);
     }
 

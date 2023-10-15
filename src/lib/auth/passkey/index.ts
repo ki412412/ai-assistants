@@ -57,23 +57,27 @@ export class Passkey {
             .limit(1);
 
         if (!data || data.length === 0) {
+            console.log('User not found');
             return null;
         }
         if (error) {
+            console.error(error);
             throw error;
         }
 
         const user: LoggedInUser = {
             id: data[0].id,
             username: data[0].username,
-            devices: data[0].authenticators.map((authenticator) => {
-                return {
-                    credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
-                    credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
-                    counter: authenticator.counter,
-                    transports: JSON.parse(authenticator.transports),
-                };
-            }),
+            devices: data[0].authenticators 
+                ? data[0].authenticators.map((authenticator) => {
+                    return {
+                        credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
+                        credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
+                        counter: authenticator.counter,
+                        transports: JSON.parse(authenticator.transports),
+                    };
+                })
+                : [],
         };
 
         return user;
