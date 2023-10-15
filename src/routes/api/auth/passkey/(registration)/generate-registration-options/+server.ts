@@ -10,6 +10,9 @@ export async function GET({ request, cookies }) {
     }
 
     const user = await passkey.getUserByID(userID);
+    if (!user) {
+        return json({ error: 'user not found' }, { status: 404 });
+    }
 
     const options = await passkey.generateRegistrationOptions(user);
 
